@@ -17,6 +17,7 @@ class ProductAvailabilityServiceImpl(
     val productRepository: ProductRepository,
     val warehouseRepository: WarehouseRepository,
     val availabilityRepository: ProductAvailabilityRepository,
+    val mailService: MailService
 
     ) : ProductAvailabilityService {
 
@@ -30,13 +31,34 @@ class ProductAvailabilityServiceImpl(
         if(availability.isEmpty()){ // added a new relationship
             newProductAvailability = ProductAvailability(ProductAvailabilityKey(), product, warehouse, quantity, alarm)
         }
-
         else{   // update previous relationship
             newProductAvailability = ProductAvailability(availability.first().id, availability.first().product, availability.first().warehouse, quantity, alarm)
         }
 
-
         availabilityRepository.save(newProductAvailability)
         return product.toDTO()
     }
+
+    override fun updateQuantity(productId: Long, warehouseId: Long, quantity: Int): ProductDTO {
+        val productInWarehouse = availabilityRepository.findAll()
+        val availability =  productInWarehouse.filter { it.product.id == productId && it.warehouse.id == warehouseId} as MutableList<ProductAvailability>
+
+        if(availability.isEmpty()){ // added a new relationship
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Relationship not found")
+        }
+        else{   // update previous relationship
+            if (quantity < availability.first().alarm){
+                val message = "Attenzione! Quantità del prodotto " + productId.toString() + " nel warehouse " + warehouseId.toString() + " sotto la soglia"
+                mailService.sendMessage("wa2team01@gmail.com", "prova", message)
+            }
+            if(quantity > 0){
+               val newProductAvailability = ProductAvailability(availability.first().id, availability.first().product, availability.first().warehouse, quantity, availability.first().alarm)
+                availabilityRepository.save(newProductAvailability)
+            }
+        }
+
+
+        return availability.first().product.toDTO()
+    }
+
 }

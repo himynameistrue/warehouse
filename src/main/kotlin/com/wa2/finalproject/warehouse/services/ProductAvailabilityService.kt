@@ -7,6 +7,7 @@ import java.util.*
 interface ProductAvailabilityService {
 
     fun productInWarehouse(productId: Long, warehouseId: Long, quantity: Int, alarm: Int): ProductDTO
+    fun updateQuantity(productId: Long, warehouseId: Long, quantity: Int): ProductDTO
 }
 
 

@@ -19,4 +19,14 @@ class ProductAvailabiltyController(val productAvailabilityService: ProductAvaila
         ): ProductDTO {
             return productAvailabilityService.productInWarehouse(productID, warehouseID, quantity, alarm)
         }
+
+    /*Update product-warehouse relationship*/
+    @PutMapping("/{productID}/warehouse/{warehouseID}") // OK
+    fun updateQuantity(
+        @PathVariable productID: Long,
+        @PathVariable warehouseID: Long,
+        quantity: Int
+    ): ProductDTO {
+        return productAvailabilityService.updateQuantity(productID, warehouseID, quantity)
+    }
     }
