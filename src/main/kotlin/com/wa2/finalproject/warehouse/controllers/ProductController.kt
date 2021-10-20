@@ -3,6 +3,7 @@ package com.wa2.finalproject.warehouse.controllers
 
 import com.wa2.finalproject.warehouse.dto.ProductDTO
 import com.wa2.finalproject.warehouse.dto.WarehouseDTO
+import com.wa2.finalproject.warehouse.services.ProductAvailabilityService
 import com.wa2.finalproject.warehouse.services.ProductService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -67,7 +68,4 @@ class ProductController(val productService: ProductService) {
     fun getWarehousesByProductID(@PathVariable productID: Long): List<WarehouseDTO> {
         return productService.getWarehousesForProduct(productID)
     }
-
-
-
 }

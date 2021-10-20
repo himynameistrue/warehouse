@@ -15,7 +15,6 @@ interface ProductService {
     fun getPictureByID(productId: Long): String
     fun updatePicture(productId: Long, picture_url: String): ProductDTO
     fun getWarehousesForProduct(productId: Long): List<WarehouseDTO>
-
 }
 
 

@@ -1,10 +1,13 @@
 package com.wa2.finalproject.warehouse.services
 
 import com.wa2.finalproject.warehouse.domain.Product
+import com.wa2.finalproject.warehouse.domain.ProductAvailability
+import com.wa2.finalproject.warehouse.domain.ProductAvailabilityKey
 import com.wa2.finalproject.warehouse.dto.ProductDTO
 import com.wa2.finalproject.warehouse.dto.WarehouseDTO
 import com.wa2.finalproject.warehouse.repositories.ProductAvailabilityRepository
 import com.wa2.finalproject.warehouse.repositories.ProductRepository
+import com.wa2.finalproject.warehouse.repositories.WarehouseRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -132,8 +135,9 @@ class ProductServiceImpl(
         for(a in availabilityById){
            warehouses.add(a.warehouse.toDTO())
         }
-
         return warehouses
     }
+
+
 
 }
