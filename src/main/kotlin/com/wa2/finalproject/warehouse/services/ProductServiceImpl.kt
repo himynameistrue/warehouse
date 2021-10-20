@@ -8,6 +8,9 @@ import com.wa2.finalproject.warehouse.repositories.ProductRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.transaction.Transactional
 
@@ -43,18 +46,23 @@ class ProductServiceImpl(
         return product.get().toDTO()
     }
 
-    override fun create(name: String, description: String, picture_url: String?, category: String?, price: Float, average_rating: Float, creation_date: Date) : ProductDTO{
-     val product = Product(null, name, description, picture_url, category, price, average_rating, creation_date, mutableListOf())
+    override fun create(name: String, description: String, picture_url: String, category: String, price: Float) : ProductDTO{
+        val creation_date = Date()
+        val product = Product(null, name, description, picture_url, category, price, 0F, creation_date, mutableListOf())
         return productRepository.save(product).toDTO()
     }
 
-    override fun updateFull(productId: Long, name: String, description: String, picture_url: String, category: String, price: Float, average_rating: Float, creation_date: Date) : ProductDTO{
+    override fun updateFull(productId: Long, name: String, description: String, picture_url: String, category: String, price: Float, average_rating: Float) : ProductDTO{
         var product = productRepository.findById(productId)
         var newProduct: Product
+        val creation_date = Date()
+
         if(product.isEmpty){
-            newProduct = Product(null, name, description, picture_url, category, price, average_rating, creation_date, mutableListOf())
+            newProduct = Product(null, name, description, picture_url, category, price, 0F, creation_date, mutableListOf())
         }
-        newProduct = Product(productId, name, description, picture_url, category, price, average_rating, creation_date)
+        else{
+            newProduct = Product(productId, name, description, picture_url, category, price, average_rating, creation_date , product.get().availabilities)
+        }
         return productRepository.save(newProduct).toDTO()
     }
 
@@ -114,12 +122,18 @@ class ProductServiceImpl(
     }
 
     override fun getWarehousesForProduct(productId: Long): List<WarehouseDTO> {
-        TODO("Not yet implemented")
-    }
-    /*  override fun getProductsForProduct(productId: Long): List<WarehouseDTO>{
-          var warehousesListID = mutableListOf<Long>()
-      }
+        val product = productRepository.findById(productId)
+        val warehouses = mutableListOf<WarehouseDTO>()
 
-     */
+        if (product.isEmpty){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found")
+        }
+        val availabilityById = product.get().availabilities
+        for(a in availabilityById){
+           warehouses.add(a.warehouse.toDTO())
+        }
+
+        return warehouses
+    }
 
 }

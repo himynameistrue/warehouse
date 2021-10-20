@@ -29,7 +29,8 @@ class ProductAvailability(
     val warehouse: Warehouse,
 
     val quantity: Int,
-    val alarm: Int)
+    val alarm: Int
+    )
 
 {
     override fun toString(): String {

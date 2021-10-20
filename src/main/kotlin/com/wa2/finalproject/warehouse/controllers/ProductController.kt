@@ -2,6 +2,7 @@ package com.wa2.finalproject.warehouse.controllers
 
 
 import com.wa2.finalproject.warehouse.dto.ProductDTO
+import com.wa2.finalproject.warehouse.dto.WarehouseDTO
 import com.wa2.finalproject.warehouse.services.ProductService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -27,14 +28,14 @@ class ProductController(val productService: ProductService) {
     /*Adds a new product*/
     @PostMapping // OK
     @ResponseStatus(HttpStatus.CREATED)
-    fun createProduct(name: String, description: String, picture_url: String, category: String, price: Float, average_rating: Float, creation_date: Date): ProductDTO {
-        return productService.create(name, description, picture_url, category, price, average_rating, creation_date )
+    fun createProduct(name: String, description: String, picture_url: String, category: String, price: Float): ProductDTO {
+        return productService.create(name, description, picture_url, category, price)
     }
 
     /*Updates an existing product (full representation), or adds a new one if not exists*/
     @PutMapping("/{productID}") // OK
-    fun updateFullProduct(@PathVariable productID: Long, name: String, description: String, picture_url: String, category: String, price: Float, average_rating: Float, creation_date: Date): ProductDTO {
-        return productService.updateFull(productID, name, description, picture_url, category, price, average_rating, creation_date)
+    fun updateFullProduct(@PathVariable productID: Long, name: String, description: String, picture_url: String, category: String, price: Float, average_rating: Float): ProductDTO {
+        return productService.updateFull(productID, name, description, picture_url, category, price, average_rating)
     }
 
     /*Updates an existing product (partial representation)*/
@@ -62,9 +63,11 @@ class ProductController(val productService: ProductService) {
     }
 
     /*Gets the list of the products that contain the product*/
-   /* @GetMapping("/{productID}/warehouses") // OK
-    fun getWarehousesByProductID(@PathVariable productID: Long): ProductDTO {
-        return productService.getWarehousesForProduct()
-    }*/
+    @GetMapping("/{productID}/warehouses") // OK
+    fun getWarehousesByProductID(@PathVariable productID: Long): List<WarehouseDTO> {
+        return productService.getWarehousesForProduct(productID)
+    }
+
+
 
 }

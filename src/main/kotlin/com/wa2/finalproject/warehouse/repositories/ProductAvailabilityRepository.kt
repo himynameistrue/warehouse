@@ -9,8 +9,8 @@ import java.util.*
 
 @Repository
 interface ProductAvailabilityRepository: CrudRepository<ProductAvailability, Long> {
-  /* // @Query("SELECT t FROM warehouse_product t WHERE t.product_id = :product_id")
-    fun getWarehousesByProductID(
+   // @Query("SELECT t FROM warehouse_product t WHERE t.product_id = :product_id")
+   /* fun getWarehousesByProductID(
         @Param("product_id") productID: Long,
     ): Iterable<ProductAvailability>*/
 }

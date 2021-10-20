@@ -58,8 +58,6 @@ class WarehouseServiceImpl(
 
     }
 
-
-
     override fun updatePartial(warehouseId: Long, name: String?, location: String?) : WarehouseDTO {
         var warehouse = warehouseRepository.findById(warehouseId)
         var newWarehouse: Warehouse
@@ -82,7 +80,6 @@ class WarehouseServiceImpl(
         return warehouseRepository.save(newWarehouse).toDTO()
 
     }
-
 
     override fun delete(warehouseId: Long) {
         var warehouse = warehouseRepository.findById(warehouseId)
